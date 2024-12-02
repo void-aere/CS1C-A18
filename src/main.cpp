@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <sys/stat.h>
 #include <fstream>
@@ -8,6 +9,7 @@
 bool fileExists(const std::string& path);
 void loadData(std::vector<long long>& dataset, std::ifstream& stream);
 void selectionSort(std::vector<long long>& dataset);
+bool verify(std::vector<long long>& dataset);
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -29,14 +31,19 @@ int main(int argc, char* argv[]) {
     std::vector<long long> dataset(length);
     // std::thread loader(loadData, dataset, file)
     // loader.join();
-    std::cout << "loading... " << std::endl;
+    std::cout << "loading... " << std::flush;
     loadData(dataset, file);
-    std::cout << "done.\nsorting... " << std::endl;;
-    selectionSort(dataset);
-    std::cout << "done.\nsaving..." << std::endl;
-    std::ofstream outfile(path + ".sorted");
-    for (long long i : dataset) outfile << i << std::endl;
     std::cout << "done." << std::endl;
+
+    std::cout << "verifying... " << std::flush;
+    bool sorted = verify(dataset);
+    std::cout << std::boolalpha << "done. " << (sorted ? "(sorted)" : "(unsorted)") << std::endl;
+
+    if (!sorted) {
+        std::cout << "sorting... " << std::flush;
+        selectionSort(dataset);
+        std::cout << "done." << std::endl;
+    }
 }
 
 bool fileExists(const std::string& path) {
@@ -69,4 +76,11 @@ void selectionSort(std::vector<long long>& dataset) {
             dataset[mindex] = temp;
         }
     }
+}
+
+bool verify(std::vector<long long>& dataset) {
+    for (size_t i = 1; i < dataset.size(); ++i) {
+        if (dataset[i - 1] > dataset[i]) return false;
+    }
+    return true;
 }
