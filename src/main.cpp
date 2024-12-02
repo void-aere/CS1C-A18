@@ -70,7 +70,6 @@ int main(int argc, char* argv[]) {
     option = sComps = bComps = target = 0;
     do {
         clearScreen();
-        std::cout << "sComps: " << sComps << std::endl;
         printMenu(target, sComps, bComps);
         option = getMenuOptionAuto(4);
 
