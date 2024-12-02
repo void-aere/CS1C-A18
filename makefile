@@ -1,5 +1,5 @@
 # Add all new cpp-hpp combo names to this list!
-SYMBOLS = 
+SYMBOLS = helpers
 
 ENTRYPOINT = main
 
